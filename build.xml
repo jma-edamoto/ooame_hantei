@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+<project name="oswy61.distinction.rain" basedir="." default="dist">
+	<property name="project" value="oswy61.distinction.rain"/>
+	<property name="glassfish.lib" value="C:/glassfish5/glassfish/lib"/>
+	<property name="common.lib" value="C:/glassfish5/glassfish/domains/domain1/lib"/>
+	<property name="version.conf" value="jp/go/kishou/adess/oswy61/distinction/rain/conf/Version.properties"/>
+	<property name="src.home" value="WebContent/WEB-INF/src"/>
+	<property name="lib.home" value="WebContent/WEB-INF/lib"/>
+	<property name="dist.home" value="dist"/>
+	<property name="build.home" value="WebContent/WEB-INF/classes"/>
+	
+	<!--コンパイルオプション-->
+	<property name="compile.debug"       value="true"/>
+	<property name="compile.deprecation" value="true"/>
+	<property name="compile.optimize"    value="false"/>
+	<property name="compile.source"      value="1.8" />
+	<property name="compile.target"      value="1.8" />
+	
+	<!-- コンパイルクラスパス -->
+	<path id="compile.classpath">
+		<fileset dir="${lib.home}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${glassfish.lib}">
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${common.lib}">
+			<include name="adess-common-*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- コンパイル実行 -->
+	<target name="compile" depends="clean" description="compile">
+		<mkdir dir="${build.home}" />
+		<!-- 作成日付、時刻をプロパティファイルに記述 -->
+		<tstamp prefix = "Version.">
+			<format property = "date" pattern = "yyyy/MM/dd HH:mm:ss.SSS zzzz"/>
+			<format property = "version" pattern = "yyyy/MM/dd HH:mm" />
+		</tstamp>
+		<!-- バージョン出力 -->
+		<echoproperties
+			destfile="${basedir}/${src.home}/${version.conf}"
+			prefix = "Version." />
+		<!-- コンパイル -->
+		<javac srcdir="${src.home}" extdirs="lib" debug="${compile.debug}" source="${compile.source}" target="${compile.target}" destdir="${build.home}" includeantruntime="no">
+			<classpath refid="compile.classpath"/>
+		</javac>
+		<!-- propertiesファイルのコピー -->
+		<copy todir="${basedir}/WebContent/WEB-INF/classes">
+			<fileset dir="${basedir}/WebContent/WEB-INF/src">
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- warファイルの作成 -->
+	<target name="dist" depends="clean,compile" description="Create war file">
+		<mkdir dir="${dist.home}" />
+		<war destfile="${dist.home}/${project}.war" webxml="${basedir}/WebContent/WEB-INF/web.xml">
+			<fileset dir="${basedir}/WebContent">
+				<!-- warファイルに含まないファイル -->
+				<exclude name="work/**" />
+				<exclude name=".settings/**" />
+				<exclude name=".*" />
+			</fileset>
+		</war>
+	</target>
+	
+	<!-- 古いwarファイルの削除 -->
+	<target name="clean" description="cleanup file">
+		<delete dir="${build.home}"/>
+		<delete dir="${dist.home}"/>
+	</target>
+</project>

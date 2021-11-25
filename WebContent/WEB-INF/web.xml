@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  version="2.4">
+	<display-name>和歌山県大雨基本パターン判定ツール</display-name>
+	<servlet>
+		<servlet-name>PDFCreatorServlet</servlet-name>
+		<servlet-class>jp.go.kishou.adess.oswy61.distinction.rain.servlet.PDFCreatorServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ProcessServlet</servlet-name>
+		<servlet-class>jp.go.kishou.adess.oswy61.distinction.rain.servlet.ProcessServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PDFCreatorServlet</servlet-name>
+		<url-pattern>/PDFCreatorServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProcessServlet</servlet-name>
+		<url-pattern>/ProcessServlet</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
